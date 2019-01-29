@@ -1,1 +1,5 @@
-/vendor/
+/vendor
+/.idea
+/_ide_helper.php
+composer.phar
+/node_modules
