@@ -8,17 +8,28 @@ namespace Inc\Pages;
 
 use Inc\Api\SettingsApi;
 use Inc\Base\BaseController;
+use Inc\Api\Callbacks\AdminCallbacks;
 
 class Admin extends BaseController
 {
     public $settings;
+    public $callbacks;
     public $pages = array();
     public $subpages = array();
 
-    public function __construct()
+    public function register()
     {
+        $this->callbacks = new AdminCallbacks();
         $this->settings = new SettingsApi();
 
+        $this->setPages();
+        $this->setSubPages();
+
+        $this->settings->addPages($this->pages)->withSubPage('Dashboard')->addSubPages($this->subpages)->register();
+    }
+
+    public function setPages()
+    {
         $this->pages = array(
             array(
                 'page_title' => 'Alecaddd Plugin',
@@ -30,7 +41,10 @@ class Admin extends BaseController
                 'position' => 110
             )
         );
+    }
 
+    public function setSubPages()
+    {
         $this->subpages = array(
             array(
                 'parent_slug' => 'alecaddd_plugin',
@@ -57,10 +71,5 @@ class Admin extends BaseController
                 'callback' => function() { echo '<h1>Widgets Manager</h1>'; }
             )
         );
-    }
-
-    public function register()
-    {
-        $this->settings->addPages($this->pages)->withSubPage('Dashboard')->addSubPages($this->subpages)->register();
     }
 }
