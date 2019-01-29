@@ -25,6 +25,10 @@ class Admin extends BaseController
         $this->setPages();
         $this->setSubPages();
 
+        $this->setSettings();
+        $this->setSections();
+        $this->setFields();
+
         $this->settings->addPages($this->pages)->withSubPage('Dashboard')->addSubPages($this->subpages)->register();
     }
 
@@ -36,7 +40,7 @@ class Admin extends BaseController
                 'menu_title' => 'Alecaddd',
                 'capability' => 'manage_options',
                 'menu_slug' => 'alecaddd_plugin',
-                'callback' => function() { echo '<h1>Alecaddd Plugin</h1>'; },
+                'callback' => array($this->callbacks, 'adminDashboard'),
                 'icon_url' => 'dashicons-store',
                 'position' => 110
             )
@@ -52,7 +56,7 @@ class Admin extends BaseController
                 'menu_title' => 'CPT',
                 'capability' => 'manage_options',
                 'menu_slug' => 'alecaddd_cpt',
-                'callback' => function() { echo '<h1>CPT Manager</h1>'; }
+                'callback' => array( $this->callbacks, 'adminCpt' )
             ),
             array(
                 'parent_slug' => 'alecaddd_plugin',
@@ -60,7 +64,7 @@ class Admin extends BaseController
                 'menu_title' => 'Taxonomies',
                 'capability' => 'manage_options',
                 'menu_slug' => 'alecaddd_taxonomies',
-                'callback' => function() { echo '<h1>Taxonomies Manager</h1>'; }
+                'callback' => array( $this->callbacks, 'adminTaxonomy' )
             ),
             array(
                 'parent_slug' => 'alecaddd_plugin',
@@ -68,8 +72,66 @@ class Admin extends BaseController
                 'menu_title' => 'Widgets',
                 'capability' => 'manage_options',
                 'menu_slug' => 'alecaddd_widgets',
-                'callback' => function() { echo '<h1>Widgets Manager</h1>'; }
+                'callback' => array( $this->callbacks, 'adminWidget' )
             )
         );
+    }
+
+    public function setSettings()
+    {
+        $args = array(
+            array(
+                'option_group' => 'alecaddd_options_group',
+                'option_name' => 'text_example',
+                'callback' => array( $this->callbacks, 'alecadddOptionsGroup' )
+            ),
+            array(
+                'option_group' => 'alecaddd_options_group',
+                'option_name' => 'first_name'
+            )
+        );
+        $this->settings->setSettings( $args );
+    }
+
+    public function setSections()
+    {
+        $args = array(
+            array(
+                'id' => 'alecaddd_admin_index',
+                'title' => 'Settings',
+                'callback' => array( $this->callbacks, 'alecadddAdminSection' ),
+                'page' => 'alecaddd_plugin'
+            )
+        );
+        $this->settings->setSections( $args );
+    }
+
+    public function setFields()
+    {
+        $args = array(
+            array(
+                'id' => 'text_example',
+                'title' => 'Text Example',
+                'callback' => array( $this->callbacks, 'alecadddTextExample' ),
+                'page' => 'alecaddd_plugin',
+                'section' => 'alecaddd_admin_index',
+                'args' => array(
+                    'label_for' => 'text_example',
+                    'class' => 'example-class'
+                )
+            ),
+            array(
+                'id' => 'first_name',
+                'title' => 'First Name',
+                'callback' => array( $this->callbacks, 'alecadddFirstName' ),
+                'page' => 'alecaddd_plugin',
+                'section' => 'alecaddd_admin_index',
+                'args' => array(
+                    'label_for' => 'first_name',
+                    'class' => 'example-class'
+                )
+            )
+        );
+        $this->settings->setFields( $args );
     }
 }
