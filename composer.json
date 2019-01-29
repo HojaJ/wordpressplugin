@@ -1,0 +1,17 @@
+{
+    "name": "hj/alecaddd-plugin",
+    "description": "Wordpress Plugin",
+    "type": "project",
+    "license": "GPL",
+    "authors": [
+        {
+            "name": "Baba",
+            "email": "baba2box@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {"Inc\\": "./inc"}
+    }
+}
