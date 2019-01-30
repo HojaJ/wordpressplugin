@@ -9,39 +9,34 @@ namespace Inc\Api;
 class SettingsApi
 {
     public $admin_pages = array();
+
     public $admin_subpages = array();
+
     public $settings = array();
+
     public $sections = array();
+
     public $fields = array();
 
     public function register()
     {
-        if( !empty($this->admin_pages) ){
-            add_action('admin_menu', array($this, 'addAdminMenu'));
+        if ( ! empty($this->admin_pages) || ! empty($this->admin_subpages) ) {
+            add_action( 'admin_menu', array( $this, 'addAdminMenu' ) );
         }
+
         if ( !empty($this->settings) ) {
             add_action( 'admin_init', array( $this, 'registerCustomFields' ) );
         }
     }
 
-    public function addPages(array $pages)
+    public function addPages( array $pages )
     {
         $this->admin_pages = $pages;
+
         return $this;
     }
 
-    public function addAdminMenu()
-    {
-        foreach ($this->admin_pages as $page){
-            add_menu_page( $page['page_title'], $page['menu_title'], $page['capability'], $page['menu_slug'], $page['callback'], $page['icon_url'], $page['position'] );
-        }
-
-        foreach ( $this->admin_subpages as $page ) {
-            add_submenu_page( $page['parent_slug'], $page['page_title'], $page['menu_title'], $page['capability'], $page['menu_slug'], $page['callback'] );
-        }
-    }
-
-    public function withSubPage( string $title = null )
+    public function withSubPage(  $title = null )
     {
         if ( empty($this->admin_pages) ) {
             return $this;
@@ -61,36 +56,48 @@ class SettingsApi
         );
 
         $this->admin_subpages = $subpage;
+
         return $this;
     }
 
     public function addSubPages( array $pages )
     {
         $this->admin_subpages = array_merge( $this->admin_subpages, $pages );
+
         return $this;
     }
 
+    public function addAdminMenu()
+    {
+        foreach ( $this->admin_pages as $page ) {
+            add_menu_page( $page['page_title'], $page['menu_title'], $page['capability'], $page['menu_slug'], $page['callback'], $page['icon_url'], $page['position'] );
+        }
+
+        foreach ( $this->admin_subpages as $page ) {
+            add_submenu_page( $page['parent_slug'], $page['page_title'], $page['menu_title'], $page['capability'], $page['menu_slug'], $page['callback'] );
+        }
+    }
 
     public function setSettings( array $settings )
     {
         $this->settings = $settings;
+
         return $this;
     }
-
 
     public function setSections( array $sections )
     {
         $this->sections = $sections;
+
         return $this;
     }
-
 
     public function setFields( array $fields )
     {
         $this->fields = $fields;
+
         return $this;
     }
-
 
     public function registerCustomFields()
     {
