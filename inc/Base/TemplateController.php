@@ -1,44 +1,46 @@
-<?php
+<?php 
 /**
- * @package AlecadddPlugin
+ * @package  AlecadddPlugin
  */
-
 namespace Inc\Base;
 
-
-use Inc\Api\Callbacks\AdminCallbacks;
 use Inc\Api\SettingsApi;
+use Inc\Base\BaseController;
+use Inc\Api\Callbacks\AdminCallbacks;
 
+/**
+* 
+*/
 class TemplateController extends BaseController
 {
-    public $callbacks;
-    public $settings;
-    public $subpages = array();
+	public $callbacks;
 
-    public function register()
-    {
-        if ( ! $this->activated( 'templates_manager' ) ) return;
+	public $subpages = array();
 
-        $this->settings = new SettingsApi();
+	public function register()
+	{
+		if ( ! $this->activated( 'templates_manager' ) ) return;
 
-        $this->callbacks = new AdminCallbacks();
+		$this->settings = new SettingsApi();
 
-        $this->setSubpages();
+		$this->callbacks = new AdminCallbacks();
 
-        $this->settings->addSubPages( $this->subpages )->register();
-    }
+		$this->setSubpages();
 
-    public function setSubpages()
-    {
-        $this->subpages = array(
-            array(
-                'parent_slug' => 'alecaddd_plugin',
-                'page_title' => 'Templates Manager',
-                'menu_title' => 'Templates Manager',
-                'capability' => 'manage_options',
-                'menu_slug' => 'alecaddd_templates',
-                'callback' => array( $this->callbacks, 'adminTemplates' )
-            )
-        );
-    }
+		$this->settings->addSubPages( $this->subpages )->register();
+	}
+
+	public function setSubpages()
+	{
+		$this->subpages = array(
+			array(
+				'parent_slug' => 'alecaddd_plugin', 
+				'page_title' => 'Templates Manager', 
+				'menu_title' => 'Templates Manager', 
+				'capability' => 'manage_options', 
+				'menu_slug' => 'alecaddd_templates', 
+				'callback' => array( $this->callbacks, 'adminTemplates' )
+			)
+		);
+	}
 }

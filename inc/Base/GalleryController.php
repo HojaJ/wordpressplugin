@@ -1,44 +1,46 @@
-<?php
+<?php 
 /**
- * @package AlecadddPlugin
+ * @package  AlecadddPlugin
  */
-
 namespace Inc\Base;
 
-
-use Inc\Api\Callbacks\AdminCallbacks;
 use Inc\Api\SettingsApi;
+use Inc\Base\BaseController;
+use Inc\Api\Callbacks\AdminCallbacks;
 
+/**
+* 
+*/
 class GalleryController extends BaseController
 {
-    public $callbacks;
-    public $settings;
-    public $subpages = array();
+	public $callbacks;
 
-    public function register()
-    {
-        if ( ! $this->activated( 'gallery_manager' ) ) return;
+	public $subpages = array();
 
-        $this->settings = new SettingsApi();
+	public function register()
+	{
+		if ( ! $this->activated( 'gallery_manager' ) ) return;
 
-        $this->callbacks = new AdminCallbacks();
+		$this->settings = new SettingsApi();
 
-        $this->setSubpages();
+		$this->callbacks = new AdminCallbacks();
 
-        $this->settings->addSubPages( $this->subpages )->register();
-    }
+		$this->setSubpages();
 
-    public function setSubpages()
-    {
-        $this->subpages = array(
-            array(
-                'parent_slug' => 'alecaddd_plugin',
-                'page_title' => 'Gallery Manager',
-                'menu_title' => 'Gallery Manager',
-                'capability' => 'manage_options',
-                'menu_slug' => 'alecaddd_gallery',
-                'callback' => array( $this->callbacks, 'adminGallery' )
-            )
-        );
-    }
+		$this->settings->addSubPages( $this->subpages )->register();
+	}
+
+	public function setSubpages()
+	{
+		$this->subpages = array(
+			array(
+				'parent_slug' => 'alecaddd_plugin', 
+				'page_title' => 'Gallery Manager', 
+				'menu_title' => 'Gallery Manager', 
+				'capability' => 'manage_options', 
+				'menu_slug' => 'alecaddd_gallery', 
+				'callback' => array( $this->callbacks, 'adminGallery' )
+			)
+		);
+	}
 }

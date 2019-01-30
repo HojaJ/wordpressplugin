@@ -1,44 +1,46 @@
 <?php
 /**
- * @package AlecadddPlugin
+ * @package  AlecadddPlugin
  */
-
 namespace Inc\Base;
 
-
-use Inc\Api\Callbacks\AdminCallbacks;
 use Inc\Api\SettingsApi;
+use Inc\Base\BaseController;
+use Inc\Api\Callbacks\AdminCallbacks;
 
+/**
+* 
+*/
 class ChatController extends BaseController
 {
-    public $callbacks;
-    public $settings;
-    public $subpages = array();
+	public $callbacks;
 
-    public function register()
-    {
-        if ( ! $this->activated( 'media_widget' ) ) return;
+	public $subpages = array();
 
-        $this->settings = new SettingsApi();
+	public function register()
+	{
+		if ( ! $this->activated( 'chat_manager' ) ) return;
 
-        $this->callbacks = new AdminCallbacks();
+		$this->settings = new SettingsApi();
 
-        $this->setSubpages();
+		$this->callbacks = new AdminCallbacks();
 
-        $this->settings->addSubPages( $this->subpages )->register();
-    }
+		$this->setSubpages();
 
-    public function setSubpages()
-    {
-        $this->subpages = array(
-            array(
-                'parent_slug' => 'alecaddd_plugin',
-                'page_title' => 'Widgets Manager',
-                'menu_title' => 'Widgets Manager',
-                'capability' => 'manage_options',
-                'menu_slug' => 'alecaddd_widget',
-                'callback' => array( $this->callbacks, 'adminWidget' )
-            )
-        );
-    }
+		$this->settings->addSubPages( $this->subpages )->register();
+	}
+
+	public function setSubpages()
+	{
+		$this->subpages = array(
+			array(
+				'parent_slug' => 'alecaddd_plugin', 
+				'page_title' => 'Chat Manager', 
+				'menu_title' => 'Chat Manager', 
+				'capability' => 'manage_options', 
+				'menu_slug' => 'alecaddd_chat', 
+				'callback' => array( $this->callbacks, 'adminChat' )
+			)
+		);
+	}
 }
