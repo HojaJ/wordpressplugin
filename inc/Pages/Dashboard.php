@@ -19,7 +19,7 @@ class Dashboard extends BaseController
 
 	public $pages = array();
 
-	public function register() 
+	public function register()
 	{
 		$this->settings = new SettingsApi();
 
